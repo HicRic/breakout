@@ -805,6 +805,61 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level1
       objectReference: {fileID: 0}
+    - target: {fileID: 5062771091907465106, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771092469135370, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771092488602659, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771092806541479, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771092983887019, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771092994353272, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771093032340291, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771093301971250, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771093458355007, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771093643628216, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062771093935087144, guid: 160788585f7aaea41ba97414d3bd2af5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7434106220592581723, guid: 160788585f7aaea41ba97414d3bd2af5,
         type: 3}
       propertyPath: m_LocalPosition.x

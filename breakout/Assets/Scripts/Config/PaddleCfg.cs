@@ -8,3 +8,4 @@ public class PaddleCfg
     public float MoveSpeed;
 }
 
+

@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -12,7 +11,8 @@ public class PhysicsDamageSystem : JobComponentSystem
     private BuildPhysicsWorld buildPhysicsWorld;
     private StepPhysicsWorld stepPhysicsWorld;
     private EndFramePhysicsSystem endFramePhysicsSystem;
-    EntityQuery DamagerGroup;
+    private EntityQuery DamagerQuery;
+    private EntityQuery HealthQuery;
 
     protected override void OnCreate()
     {
@@ -20,14 +20,19 @@ public class PhysicsDamageSystem : JobComponentSystem
         stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
         endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem>();
 
-        DamagerGroup = GetEntityQuery(new EntityQueryDesc
+        DamagerQuery = GetEntityQuery(new EntityQueryDesc
         {
-            All = new ComponentType[] { typeof(PhysicsDamager) }
+            All = new [] { ComponentType.ReadOnly<PhysicsDamager>() }
+        });
+
+        HealthQuery = GetEntityQuery(new EntityQueryDesc
+        {
+            All = new ComponentType[] { typeof(Health) }
         });
     }
 
     [BurstCompile]
-    struct CollisionEventDamageJob : ICollisionEventsJob
+    private struct CollisionEventDamageJob : ICollisionEventsJob
     {
         [ReadOnly] public ComponentDataFromEntity<PhysicsDamager> PhysicsDamagerGroup;
         public ComponentDataFromEntity<Health> HealthGroup;
@@ -66,21 +71,22 @@ public class PhysicsDamageSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        // todo more elegant way of specifying "run system if there are Health AND PhysicsDamager components"
+        // (entity query takes care of one but not other...right?)
+        // If we schedule the job when there's no health components left,
+        // we do no required work and our job is never .Completed() and causes errors next frame
+        int healthCount = HealthQuery.CalculateEntityCount();
+        if (healthCount == 0)
+        {
+            return inputDeps;
+        }
+
         JobHandle jobHandle = new CollisionEventDamageJob
-            {
-                HealthGroup = GetComponentDataFromEntity<Health>(),
-                PhysicsDamagerGroup = GetComponentDataFromEntity<PhysicsDamager>(true)
-            }
-            .Schedule(stepPhysicsWorld.Simulation, ref buildPhysicsWorld.PhysicsWorld, inputDeps);
-
-        // todo understand if this is correct or how to avoid it
-        // Right now, you can remove this BUT if there are no Health components around,
-        // then DestroyDeadSystem doesn't run, which means nothing depends on this job
-        // so nothing waits on it's completion, which leads to this job being left
-        // outstanding until it collides with the physics systems next frame and causes read/write errors.
-
-        // This at least ensures SOMETHING wants this to run so it doesn't hang around. Feels weird though.
-        endFramePhysicsSystem.HandlesToWaitFor.Add(jobHandle);
+        {
+            HealthGroup = GetComponentDataFromEntity<Health>(),
+            PhysicsDamagerGroup = GetComponentDataFromEntity<PhysicsDamager>(true)
+        }
+        .Schedule(stepPhysicsWorld.Simulation, ref buildPhysicsWorld.PhysicsWorld, inputDeps);
 
         return jobHandle;
     }
