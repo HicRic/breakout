@@ -3,7 +3,7 @@
 [GenerateAuthoringComponent]
 public struct SpeedControl : IComponentData
 {
-    public float TargetSpeed;
+    public float TargetSpeedSq;
     public float ControlPower;
 }
 
