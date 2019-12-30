@@ -22,7 +22,10 @@ public class PlayAreaSystem : JobComponentSystem
             ECB = ecbSystem.CreateCommandBuffer().ToConcurrent()
         };
 
-        return job.Schedule(this, inputDeps);
+        JobHandle jobHandle = job.Schedule(this, inputDeps);
+        ecbSystem.AddJobHandleForProducer(jobHandle);
+
+        return jobHandle;
     }
 
     [RequireComponentTag(typeof(DestroyOutsidePlayAreaTag))]

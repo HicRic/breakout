@@ -36,6 +36,8 @@ namespace Unity.Physics.Authoring
             ComponentType[] componentTypes = new ComponentType[1];
             componentTypes[0] = typeof(PhysicsJoint);
             Entity jointEntity = entityManager.CreateEntity(componentTypes);
+            entityManager.AddComponent<PhysicsJointEntityTag>(entityA);
+
 #if UNITY_EDITOR
             var nameEntityA = entityManager.GetName(entityA);
             var nameEntityB = entityB == Entity.Null ? "PhysicsWorld" : entityManager.GetName(entityB);
