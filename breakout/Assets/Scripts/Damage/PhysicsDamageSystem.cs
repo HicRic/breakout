@@ -20,15 +20,10 @@ public class PhysicsDamageSystem : JobComponentSystem
         stepPhysicsWorld = World.GetOrCreateSystem<StepPhysicsWorld>();
         endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem>();
 
-        DamagerQuery = GetEntityQuery(new EntityQueryDesc
-        {
-            All = new [] { ComponentType.ReadOnly<PhysicsDamager>() }
-        });
-
-        HealthQuery = GetEntityQuery(new EntityQueryDesc
-        {
-            All = new ComponentType[] { typeof(Health) }
-        });
+        DamagerQuery = GetEntityQuery(ComponentType.ReadOnly<PhysicsDamager>());
+        RequireForUpdate(DamagerQuery);
+        HealthQuery = GetEntityQuery(ComponentType.ReadOnly<Health>());
+        RequireForUpdate(HealthQuery);
     }
 
     [BurstCompile]
@@ -71,16 +66,6 @@ public class PhysicsDamageSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        // todo more elegant way of specifying "run system if there are Health AND PhysicsDamager components"
-        // (entity query takes care of one but not other...right?)
-        // If we schedule the job when there's no health components left,
-        // we do no required work and our job is never .Completed() and causes errors next frame
-        int healthCount = HealthQuery.CalculateEntityCount();
-        if (healthCount == 0)
-        {
-            return inputDeps;
-        }
-
         JobHandle jobHandle = new CollisionEventDamageJob
         {
             HealthGroup = GetComponentDataFromEntity<Health>(),
