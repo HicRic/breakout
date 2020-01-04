@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Unity.Entities;
 
-[Serializable]
-public class BallConfig
+public struct BallConfig : IComponentData
 {
-    public float Speed;
-    public float SpeedControlPower;
+    public Entity Prefab;
 }
 

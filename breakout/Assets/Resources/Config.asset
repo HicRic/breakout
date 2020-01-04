@@ -16,3 +16,6 @@ MonoBehaviour:
     Prefab: {fileID: 3251812993610435606, guid: b35f1eafb5d777043a8fd348d490a692,
       type: 3}
     MoveSpeed: 0
+  Ball:
+    Prefab: {fileID: 3219432485803457355, guid: 7272e5a71cef59249a2288ce67481aa7,
+      type: 3}

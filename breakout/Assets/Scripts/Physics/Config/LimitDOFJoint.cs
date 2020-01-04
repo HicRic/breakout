@@ -50,6 +50,24 @@ namespace Unity.Physics.Authoring
                 );
         }
 
+        public static void Create2D(EntityCommandBuffer ecb, Entity entity, RigidTransform xform)
+        {
+            BlobAssetReference<JointData> joint = CreateLimitDOFJoint(xform, new bool3(false, false, true), new bool3(true, true, false));
+
+            var componentData = new PhysicsJoint
+            {
+                JointData = joint,
+                EntityA = entity,
+                EntityB = Entity.Null,
+                EnableCollision = 0,
+            };
+
+            ecb.AddComponent<PhysicsJointEntityTag>(entity);
+
+            Entity jointEntity = ecb.CreateEntity();
+            ecb.AddComponent(jointEntity, componentData);
+        }
+
         public override void Create(EntityManager entityManager)
         {
             RigidTransform bFromA = math.mul(math.inverse(worldFromB), worldFromA);
