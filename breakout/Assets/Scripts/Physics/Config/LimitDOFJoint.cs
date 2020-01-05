@@ -50,22 +50,31 @@ namespace Unity.Physics.Authoring
                 );
         }
 
+        public static void Create2D(EntityManager entityManager, Entity entity, RigidTransform xform)
+        {
+            entityManager.AddComponent<PhysicsJointEntityTag>(entity);
+
+            PhysicsJoint componentData = CreatePhysicsJoint2D(entity, xform);
+            Entity jointEntity = entityManager.CreateEntity();
+            entityManager.AddComponentData(jointEntity, componentData);
+        }
+
         public static void Create2D(EntityCommandBuffer ecb, Entity entity, RigidTransform xform)
         {
-            BlobAssetReference<JointData> joint = CreateLimitDOFJoint(xform, new bool3(false, false, true), new bool3(true, true, false));
-
-            var componentData = new PhysicsJoint
-            {
-                JointData = joint,
-                EntityA = entity,
-                EntityB = Entity.Null,
-                EnableCollision = 0,
-            };
-
             ecb.AddComponent<PhysicsJointEntityTag>(entity);
 
+            PhysicsJoint componentData = CreatePhysicsJoint2D(entity, xform);
             Entity jointEntity = ecb.CreateEntity();
             ecb.AddComponent(jointEntity, componentData);
+        }
+
+        public static void Create2D(EntityCommandBuffer.Concurrent ecb, int jobIndex, Entity entity, RigidTransform xform)
+        {
+            ecb.AddComponent<PhysicsJointEntityTag>(jobIndex, entity);
+
+            PhysicsJoint componentData = CreatePhysicsJoint2D(entity, xform);
+            Entity jointEntity = ecb.CreateEntity(jobIndex);
+            ecb.AddComponent(jobIndex, jointEntity, componentData);
         }
 
         public override void Create(EntityManager entityManager)
@@ -76,6 +85,20 @@ namespace Unity.Physics.Authoring
             {
                 CreateJointEntity(CreateLimitDOFJoint(bFromA, LockLinearAxes, LockAngularAxes), entityManager);
             }
+        }
+
+        private static PhysicsJoint CreatePhysicsJoint2D(Entity entity, RigidTransform xform)
+        {
+            BlobAssetReference<JointData> joint = CreateLimitDOFJoint(xform, new bool3(false, false, true), new bool3(true, true, false));
+
+            var componentData = new PhysicsJoint
+            {
+                JointData = joint,
+                EntityA = entity,
+                EntityB = Entity.Null,
+                EnableCollision = 0,
+            };
+            return componentData;
         }
     }
 }
