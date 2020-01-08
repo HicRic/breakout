@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
@@ -14,7 +15,7 @@ public class PlayAreaSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var playAreas = GetEntityQuery(typeof(PlayArea)).ToComponentDataArray<PlayArea>(Allocator.TempJob);
+        var playAreas = GetEntityQuery(ComponentType.ReadOnly<PlayArea>()).ToComponentDataArray<PlayArea>(Allocator.TempJob);
 
         BoundsJob job = new BoundsJob
         {

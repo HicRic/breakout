@@ -13,6 +13,10 @@ public class GameStateSystem : JobComponentSystem
         GameState state = new GameState { CurrentPhase = GameState.Phase.Playing };
         EntityManager.AddComponentData(stateEntity, state);
         SetSingleton(state);
+
+        LifeCount lifeCount = new LifeCount {Value = Config.Instance.StartingLives};
+        EntityManager.AddComponentData(stateEntity, lifeCount);
+        SetSingleton(lifeCount);
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GamePhaseFeedback : MonoBehaviour
 {
     [SerializeField] private GameObject WinObject = null;
+    [SerializeField] private GameObject LoseObject = null;
 
     private EntityQuery gameStateQuery;
     private GameState currentVisualGameState;
@@ -14,6 +15,11 @@ public class GamePhaseFeedback : MonoBehaviour
         if (WinObject)
         {
             WinObject.SetActive(false);
+        }
+
+        if (LoseObject)
+        {
+            LoseObject.SetActive(false);
         }
     }
 
@@ -39,6 +45,7 @@ public class GamePhaseFeedback : MonoBehaviour
         {
             currentVisualGameState = state;
             WinObject.SetActive(currentVisualGameState.CurrentPhase == GameState.Phase.Won);
+            LoseObject.SetActive(currentVisualGameState.CurrentPhase == GameState.Phase.Lost);
         }
     }
 }
