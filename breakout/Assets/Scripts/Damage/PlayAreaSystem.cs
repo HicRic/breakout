@@ -7,15 +7,17 @@ using Unity.Transforms;
 public class PlayAreaSystem : JobComponentSystem
 {
     private EntityCommandBufferSystem ecbSystem;
+    private EntityQuery playAreaQuery;
 
     protected override void OnCreate()
     {
         ecbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        playAreaQuery = GetEntityQuery(ComponentType.ReadOnly<PlayArea>());
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var playAreas = GetEntityQuery(ComponentType.ReadOnly<PlayArea>()).ToComponentDataArray<PlayArea>(Allocator.TempJob);
+        var playAreas = playAreaQuery.ToComponentDataArray<PlayArea>(Allocator.TempJob);
 
         BoundsJob job = new BoundsJob
         {
