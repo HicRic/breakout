@@ -1,11 +1,12 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GamePhaseFeedback : MonoBehaviour
 {
     [SerializeField] private GameObject WinObject = null;
     [SerializeField] private GameObject LoseObject = null;
+    [SerializeField] private Button RetryButton = null;
 
     private EntityQuery gameStateQuery;
     private GameState currentVisualGameState;
@@ -21,6 +22,18 @@ public class GamePhaseFeedback : MonoBehaviour
         {
             LoseObject.SetActive(false);
         }
+
+        if (RetryButton)
+        {
+            RetryButton.gameObject.SetActive(false);
+            RetryButton.onClick.AddListener(HandleRetryClick);
+        }
+    }
+
+    private void HandleRetryClick()
+    {
+        World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ResetLevelCommand));
+        RetryButton.gameObject.SetActive(false);
     }
 
     void Start()
@@ -44,8 +57,14 @@ public class GamePhaseFeedback : MonoBehaviour
         if (state.CurrentPhase != currentVisualGameState.CurrentPhase)
         {
             currentVisualGameState = state;
+
             WinObject.SetActive(currentVisualGameState.CurrentPhase == GameState.Phase.Won);
             LoseObject.SetActive(currentVisualGameState.CurrentPhase == GameState.Phase.Lost);
+
+            bool showRetry = currentVisualGameState.CurrentPhase == GameState.Phase.Lost ||
+                             currentVisualGameState.CurrentPhase == GameState.Phase.Won;
+
+            RetryButton.gameObject.SetActive(showRetry);
         }
     }
 }
