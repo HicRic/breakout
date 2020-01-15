@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Config/Root Config")]
 public class Config : ScriptableObject
 {
-    public PaddleCfg Paddle;
+    public GameObject BallPrefab;
     public int StartingLives;
     public GameObject[] BrickSets;
 

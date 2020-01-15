@@ -3,16 +3,16 @@ using Unity.Entities;
 using UnityEngine;
 
 [RequiresEntityConversion]
-[ConverterVersion("ballconvert", 1)]
-public class BallAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
+[ConverterVersion("PrefabConverter", 1)]
+public class PrefabConverter : MonoBehaviour, IDeclareReferencedPrefabs, IConvertGameObjectToEntity
 {
-    [SerializeField] private GameObject BallPrefab = null;
+    [SerializeField] private Config config = null;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         var ballConfig = new BallConfig
         {
-            Prefab = conversionSystem.GetPrimaryEntity(BallPrefab)
+            Prefab = conversionSystem.GetPrimaryEntity(config.BallPrefab)
         };
 
         dstManager.AddComponentData(entity, ballConfig);
@@ -20,7 +20,7 @@ public class BallAuthoring : MonoBehaviour, IDeclareReferencedPrefabs, IConvertG
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
-        referencedPrefabs.Add(BallPrefab);
+        referencedPrefabs.Add(config.BallPrefab);
     }
 }
 

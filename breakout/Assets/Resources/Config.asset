@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e44d770177943214e883e3ae86d315ab, type: 3}
   m_Name: Config
   m_EditorClassIdentifier: 
-  Paddle:
-    Prefab: {fileID: 3251812993610435606, guid: b35f1eafb5d777043a8fd348d490a692,
-      type: 3}
-    MoveSpeed: 0
+  BallPrefab: {fileID: 3219432485803457355, guid: 7272e5a71cef59249a2288ce67481aa7,
+    type: 3}
   StartingLives: 3
   BrickSets:
   - {fileID: 1018660744279745432, guid: 160788585f7aaea41ba97414d3bd2af5, type: 3}
